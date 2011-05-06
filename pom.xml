@@ -1,0 +1,32 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>carrot-archon</artifactId>
+		<groupId>com.carrotgarden</groupId>
+		<version>1.0.20-SNAPSHOT</version>
+	</parent>
+
+	<groupId>com.carrotgarden</groupId>
+	<artifactId>carrot-service</artifactId>
+	<version>1.0.7-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<modules>
+
+		<module>carrot-service-assemblies</module>
+		<module>carrot-service-base</module>
+		<module>carrot-service-base-template</module>
+
+		<module>carrot-service-terra</module>
+
+	</modules>
+
+	<scm>
+		<url>https://github.com/carrot-garden/carrot-service</url>
+		<connection>scm:git:git://github.com/carrot-garden/carrot-service.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/carrot-garden/carrot-service.git</developerConnection>
+	</scm>
+
+</project>

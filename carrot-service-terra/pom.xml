@@ -1,0 +1,96 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.carrotgarden</groupId>
+		<artifactId>carrot-service-base</artifactId>
+		<version>1.0.7-SNAPSHOT</version>
+		<relativePath>../carrot-service-base</relativePath>
+	</parent>
+
+	<groupId>com.carrotgarden</groupId>
+	<artifactId>carrot-service-terra</artifactId>
+	<packaging>pom</packaging>
+
+	<properties>
+
+		<tc.version>3.4.0</tc.version>
+
+		<tc.maven.version>1.6.1</tc.maven.version>
+
+		<tc.bootjar>carrot-bootjar.jar</tc.bootjar>
+
+		<tc.repo.url>http://www.terracotta.org/download/reflector/maven2</tc.repo.url>
+
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>terracotta-repository</id>
+			<url>${tc.repo.url}</url>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>terracotta-plugin-repository</id>
+			<url>${tc.repo.url}</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.terracotta</groupId>
+			<artifactId>terracotta</artifactId>
+			<version>${tc.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.terracotta</groupId>
+			<artifactId>tcconfig</artifactId>
+			<version>${tc.version}</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+
+		<pluginManagement>
+
+			<!-- http://forge.terracotta.org/releases/projects/tc-maven-plugin/ -->
+			<plugins>
+				<plugin>
+					<groupId>org.terracotta.maven.plugins</groupId>
+					<artifactId>tc-maven-plugin</artifactId>
+					<version>${tc.maven.version}</version>
+				</plugin>
+			</plugins>
+
+		</pluginManagement>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.terracotta.maven.plugins</groupId>
+				<artifactId>tc-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>bootjar</goal>
+						</goals>
+						<configuration>
+							<bootJar>${libFolderTarget}/${tc.bootjar}</bootJar>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+
+	</build>
+
+</project>

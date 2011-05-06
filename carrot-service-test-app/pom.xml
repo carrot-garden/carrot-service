@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.carrotgarden</groupId>
+		<artifactId>carrot-service-base</artifactId>
+		<version>1.0.7-SNAPSHOT</version>
+		<relativePath>../carrot-service-base</relativePath>
+	</parent>
+
+	<groupId>com.carrotgarden</groupId>
+	<artifactId>carrot-service-test-app</artifactId>
+	<packaging>pom</packaging>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>com.carrotgarden</groupId>
+			<artifactId>carrot-service-test-core</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+	</dependencies>
+
+	<properties>
+
+		<javaCommand>java</javaCommand>
+
+		<javaParameter1>-Djava.net.preferIPv4Stack=true</javaParameter1>
+		<javaParameter2>-XX:ThreadPriorityPolicy=0123456789</javaParameter2>
+
+		<mainClass>com.carrotgarden.test.MainService</mainClass>
+
+		<mainParameter1>hello</mainParameter1>
+		<mainParameter2>service</mainParameter2>
+
+		<serviceUsername>user1</serviceUsername>
+
+	</properties>
+
+	<modules>
+		<module>../carrot-service-test-core</module>
+	</modules>
+
+</project>

@@ -1,0 +1,356 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.carrotgarden</groupId>
+		<artifactId>carrot-service</artifactId>
+		<version>1.0.7-SNAPSHOT</version>
+	</parent>
+
+	<groupId>com.carrotgarden</groupId>
+	<artifactId>carrot-service-base</artifactId>
+	<packaging>pom</packaging>
+
+	<properties>
+
+		<serviceStamp>${carrotTimeFile}</serviceStamp>
+
+		<!-- you CAN override this path in order to use non-default java executable,
+			such as: java32, java64, java732, java764; -->
+		<javaCommand>java</javaCommand>
+
+		<!-- you CAN override these parameters passed to the java JVM; do not remove
+			empty entries; -->
+
+		<javaParameter0 />
+		<javaParameter1 />
+		<javaParameter2 />
+		<javaParameter3 />
+		<javaParameter4 />
+		<javaParameter5 />
+		<javaParameter6 />
+		<javaParameter7 />
+		<javaParameter8 />
+		<javaParameter9 />
+		<javaParameter10 />
+		<javaParameter11 />
+		<javaParameter12 />
+		<javaParameter13 />
+		<javaParameter14 />
+		<javaParameter15 />
+		<javaParameter16 />
+		<javaParameter17 />
+		<javaParameter18 />
+		<javaParameter19 />
+		<javaParameter20 />
+		<javaParameter21 />
+		<javaParameter22 />
+		<javaParameter23 />
+		<javaParameter24 />
+
+		<!-- you MUST override this to provide "public static void main(...)" for
+			java -->
+		<mainClass>you-must-override-this-property-in-POM</mainClass>
+
+		<!-- you CAN override these parameters passed to the mainClass; do not
+			remove empty entries; -->
+
+		<mainParameter0 />
+		<mainParameter1 />
+		<mainParameter2 />
+		<mainParameter3 />
+		<mainParameter4 />
+		<mainParameter5 />
+		<mainParameter6 />
+		<mainParameter7 />
+		<mainParameter8 />
+		<mainParameter9 />
+		<mainParameter10 />
+		<mainParameter11 />
+		<mainParameter12 />
+		<mainParameter13 />
+		<mainParameter14 />
+		<mainParameter15 />
+		<mainParameter16 />
+		<mainParameter17 />
+		<mainParameter18 />
+		<mainParameter19 />
+		<mainParameter20 />
+		<mainParameter21 />
+		<mainParameter22 />
+		<mainParameter23 />
+		<mainParameter24 />
+
+		<!-- do NOT change -->
+		<serviceName>${project.name}_${project.version}_${serviceStamp}</serviceName>
+
+		<!-- you MUST override USER -->
+		<serviceUsername>you-must-override-this-property-in-POM</serviceUsername>
+
+		<!-- use of PASS is obsolete; instead, must provide password from command
+			line when installing the service -->
+		<servicePassword>you-must-override-this-property-in-POM</servicePassword>
+
+		<!-- do NOT change; see template -->
+		<appFolderName>app</appFolderName>
+		<libFolderName>lib</libFolderName>
+
+		<!-- do NOT change -->
+		<targetDir>${project.build.directory}</targetDir>
+		<appFolderNameTemplate>${appFolderName}_template</appFolderNameTemplate>
+		<appFolderNameTimestamp>${appFolderName}_${serviceStamp}</appFolderNameTimestamp>
+		<appFolderSource>${basedir}/${appFolderName}</appFolderSource>
+		<appFolderTemplate>${targetDir}/${appFolderNameTemplate}</appFolderTemplate>
+		<appFolderTarget>${targetDir}/${appFolderNameTimestamp}</appFolderTarget>
+		<libFolderTarget>${appFolderTarget}/${libFolderName}</libFolderTarget>
+
+	</properties>
+
+	<!-- you SHOULD override this -->
+	<name>${project.artifactId}</name>
+	<description>parent POM of tanuki service</description>
+
+	<repositories>
+	</repositories>
+
+	<dependencies>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+		</dependencies>
+	</dependencyManagement>
+
+	<profiles>
+
+		<profile>
+			<!-- build service-based application -->
+			<id>application</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<file>
+					<!-- use file presence flag to allow to build this artifact itself as
+						pom, not as service; hence profile is active for actual application -->
+					<missing>carrot-tanuki-signal.txt</missing>
+				</file>
+			</activation>
+			<build>
+				<plugins>
+					<!-- unpack / copy -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<executions>
+							<!-- unpack application template -->
+							<execution>
+								<id>unpack-application-template</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>unpack</goal>
+								</goals>
+								<configuration>
+									<artifactItems>
+										<artifactItem>
+											<groupId>com.carrotgarden</groupId>
+											<artifactId>carrot-service-base-template</artifactId>
+											<version>${project.parent.version}</version>
+											<type>jar</type>
+										</artifactItem>
+									</artifactItems>
+									<outputDirectory>${appFolderTemplate}</outputDirectory>
+								</configuration>
+							</execution>
+							<!-- copy dependency jars -->
+							<execution>
+								<id>copy-dependency-jars</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${libFolderTarget}</outputDirectory>
+									<overWriteReleases>false</overWriteReleases>
+									<overWriteSnapshots>false</overWriteSnapshots>
+									<overWriteIfNewer>true</overWriteIfNewer>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+					<!-- filter application components -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<executions>
+							<!-- filter appFolderTemplate -->
+							<execution>
+								<id>copy-application-template</id>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<includeEmptyDirs>true</includeEmptyDirs>
+									<resources>
+										<resource>
+											<!-- NOTE: no filtering for binary files -->
+											<directory>${appFolderTemplate}</directory>
+											<filtering>true</filtering>
+											<excludes>
+												<exclude>**/*.exe</exclude>
+												<exclude>**/*.dll</exclude>
+												<exclude>**/*.bin</exclude>
+												<exclude>**/*.so</exclude>
+												<exclude>**/*.a</exclude>
+												<exclude>**/*.sl</exclude>
+												<exclude>**/*.jnilib</exclude>
+												<exclude>**/*.dylib</exclude>
+												<exclude>**/*.jar</exclude>
+												<exclude>**/*.zip</exclude>
+												<exclude>**/*.gz</exclude>
+												<exclude>META-INF/**</exclude>
+											</excludes>
+										</resource>
+										<resource>
+											<directory>${appFolderTemplate}</directory>
+											<filtering>false</filtering>
+											<includes>
+												<include>**/*.exe</include>
+												<include>**/*.dll</include>
+												<include>**/*.bin</include>
+												<include>**/*.so</include>
+												<include>**/*.a</include>
+												<include>**/*.sl</include>
+												<include>**/*.jnilib</include>
+												<include>**/*.dylib</include>
+												<include>**/*.jar</include>
+												<include>**/*.zip</include>
+												<include>**/*.gz</include>
+											</includes>
+										</resource>
+									</resources>
+									<outputDirectory>${appFolderTarget}</outputDirectory>
+								</configuration>
+							</execution>
+							<!-- filter appFolderSource -->
+							<execution>
+								<id>copy-application-resources</id>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<includeEmptyDirs>true</includeEmptyDirs>
+									<resources>
+										<resource>
+											<!-- NOTE: no filtering for binary files -->
+											<directory>${appFolderSource}</directory>
+											<filtering>true</filtering>
+											<excludes>
+												<exclude>**/*.exe</exclude>
+												<exclude>**/*.dll</exclude>
+												<exclude>**/*.bin</exclude>
+												<exclude>**/*.so</exclude>
+												<exclude>**/*.a</exclude>
+												<exclude>**/*.sl</exclude>
+												<exclude>**/*.jnilib</exclude>
+												<exclude>**/*.dylib</exclude>
+												<exclude>**/*.jar</exclude>
+												<exclude>**/*.zip</exclude>
+												<exclude>**/*.gz</exclude>
+												<exclude>META-INF/**</exclude>
+											</excludes>
+										</resource>
+										<resource>
+											<directory>${appFolderSource}</directory>
+											<filtering>false</filtering>
+											<includes>
+												<include>**/*.exe</include>
+												<include>**/*.dll</include>
+												<include>**/*.bin</include>
+												<include>**/*.so</include>
+												<include>**/*.a</include>
+												<include>**/*.sl</include>
+												<include>**/*.jnilib</include>
+												<include>**/*.dylib</include>
+												<include>**/*.jar</include>
+												<include>**/*.zip</include>
+												<include>**/*.gz</include>
+											</includes>
+										</resource>
+									</resources>
+									<outputDirectory>${appFolderTarget}</outputDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+					<!-- set unix file permissions on local copy -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>mark-executable-files</id>
+								<phase>package</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<tasks>
+										<echo message="setting file permissions" />
+										<chmod dir="${appFolderTarget}" perm="ugo+rx" includes="**/*.sh,**/*.bin" />
+									</tasks>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>tanuki-distro</id>
+			<build>
+				<plugins>
+					<!-- produce jar and zip archives -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<dependencies>
+							<dependency>
+								<groupId>com.carrotgarden</groupId>
+								<artifactId>carrot-service-assemblies</artifactId>
+								<version>${project.parent.version}</version>
+							</dependency>
+						</dependencies>
+						<executions>
+							<execution>
+								<id>make-tanuki-distro</id>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+								<configuration>
+									<!-- ### use for local assemblies: -->
+									<!-- <descriptors> -->
+									<!-- <descriptor>assembly-tanuki-distro.xml</descriptor> -->
+									<!-- </descriptors> -->
+									<!-- ### use for dependency assemblies: (and drop xml extension) -->
+									<descriptorRefs>
+										<descriptorRef>assembly-tanuki-distro</descriptorRef>
+									</descriptorRefs>
+									<outputDirectory>${project.build.directory}</outputDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
+
+</project>
